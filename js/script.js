@@ -1,41 +1,22 @@
-var myHeaders = new Headers();
-myHeaders.append("apikey", "yWVYGdkQ0s4x5c0pk5cWEtCSy2CbzKhl");
-var requestOptions = {
-  method: "GET",
-  redirect: "follow",
-  headers: myHeaders,
-};
-const currencyEl_one = document.getElementById("currency-one");
-const currencyEl_two = document.getElementById("currency-two");
-const amountEl_one = document.getElementById("amount-one");
-const amountEl_two = document.getElementById("amount-two");
+let inputs = document.querySelectorAll(".valor");
 
-const rateEl = document.getElementById("rate");
-const swap = document.getElementById("swap");
+let url = "https://api.exchangeratesapi.io/latest?symbols=USD,GBP,JPY";
+fetch(url)
+  .then((r) => r.json())
+  .then((data) => {
+    document.querySelector("#USD").dataset.cambio = data.rates.USD;
+    document.querySelector("#GBP").dataset.cambio = data.rates.GBP;
+    document.querySelector("#JPY").dataset.cambio = data.rates.JPY;
 
-function calculate() {
-  const currency_one = currencyEl_one.value;
-  const currency_two = currencyEl_two.value;
+    inputs.forEach((input) => {
+      input.value = input.dataset.cambio;
+    });
+  })
+  .catch((error) => console.error(error));
 
-  fetch(
-    "https://api.apilayer.com/exchangerates_data/convert?to=to&from=from&amount=amount",
-    requestOptions
-  )
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+function valorCambiado(input) {
+  let factor = input.value / input.dataset.cambio;
+  inputs.forEach((campo) => {
+    campo.value = (campo.dataset.cambio * factor).toFixed(2);
+  });
 }
-
-// Event Listeners
-currencyEl_one.addEventListener("change", calculate);
-amountEl_one.addEventListener("input", calculate);
-currencyEl_two.addEventListener("change", calculate);
-amountEl_two.addEventListener("input", calculate);
-swap.addEventListener("click", () => {
-  const temp = currencyEl_one.value;
-  currencyEl_one.value = currencyEl_two.value;
-  currencyEl_two.value = temp;
-  calculate();
-});
-
-calculate();

@@ -107,3 +107,17 @@ button:focus {
     width: 200px;
   }
 }
+.divisa {
+  display: grid; /* cuadrícula */
+  grid-template-columns: 50% 50%; /* 2 columnas iguales */
+  margin-bottom: 15px;
+  background: rgb(37, 169, 209);
+  color: white;
+}
+.nombre,
+.valor {
+  padding: 5px;
+  font-size: 16px;
+  align-self: center; /* alinear elemento al centro en altura */
+  text-align: center; /* alinear texto al centro en ancho */
+}
